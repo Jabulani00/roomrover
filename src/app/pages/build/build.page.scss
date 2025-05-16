@@ -1,0 +1,105 @@
+// Form Wrapper
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+// Cards
+ion-card {
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 6px 20px rgba(208, 92, 227, 0.25);
+  transition: transform 0.3s ease;
+}
+
+ion-card:hover {
+  transform: translateY(-4px);
+}
+
+// Card Titles
+ion-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ion-color-primary);
+}
+
+ion-card-subtitle {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+// Form Items
+ion-item {
+  --background: rgba(255, 255, 255, 0.6);
+  border-radius: 16px;
+  margin-top: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+ion-input,
+ion-textarea,
+ion-datetime {
+  --padding-start: 12px;
+  --padding-end: 12px;
+  font-size: 1rem;
+  border-radius: 12px;
+}
+
+// Notes & Tips
+ion-note {
+  background: #fef2ff;
+  border-left: 5px solid var(--ion-color-primary);
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(208, 92, 227, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+// Icons in Labels
+ion-icon {
+  font-size: 1.2rem;
+}
+
+// Booking Status Icons
+ion-list ion-item {
+  border-radius: 12px;
+  background: #f9f9f9;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+// Submit Button
+ion-button {
+  --border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 6px 20px rgba(208, 92, 227, 0.4);
+  transition: all 0.3s ease-in-out;
+}
+
+ion-button:hover {
+  transform: scale(1.02);
+}
+
+ion-button[disabled] {
+  opacity: 0.6;
+  box-shadow: none;
+}
+
+// Responsive Padding
+@media screen and (max-width: 600px) {
+  form {
+    gap: 14px;
+  }
+
+  ion-card-title {
+    font-size: 1.1rem;
+  }
+}

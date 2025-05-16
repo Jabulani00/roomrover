@@ -1,0 +1,50 @@
+<!-- HTML Template -->
+<ion-content class="ion-padding">
+  <!-- Hero Section -->
+  <div class="hero-container">
+    <h1 class="main-heading ion-text-center">RoomRover</h1>
+    <p class="sub-heading ion-text-center">Book rooms instantly. Anytime. Anywhere.</p>
+    
+    <div class="cta-buttons ion-text-center">
+      <ion-button expand="block" size="large" color="primary" routerLink="/room-list">
+        <ion-icon name="search-outline" slot="start"></ion-icon>
+        Book Now
+      </ion-button>
+      <ion-button expand="block" size="large" color="secondary" (click)="openAdminLogin()">
+        <ion-icon name="settings-outline" slot="start"></ion-icon>
+        Admin
+      </ion-button>
+    </div>
+  </div>
+  
+
+</ion-content>
+
+<!-- Admin Login Modal -->
+<ion-modal [isOpen]="showAdminModal">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Admin Login</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="dismissAdminModal()">
+            <ion-icon name="close"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <ion-item>
+        <ion-label position="floating">Username</ion-label>
+        <ion-input type="text" [(ngModel)]="adminUsername"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Password</ion-label>
+        <ion-input type="password" [(ngModel)]="adminPassword"></ion-input>
+      </ion-item>
+      <ion-button expand="block" class="ion-margin-top" (click)="loginAdmin()">
+        Login
+      </ion-button>
+    </ion-content>
+  </ng-template>
+</ion-modal>

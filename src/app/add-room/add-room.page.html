@@ -1,0 +1,46 @@
+<ion-header class="custom-header">
+  <ion-toolbar color="primary">
+    <ion-title class="custom-title">Add Room</ion-title>
+    
+      <ion-button routerlink="/admin" slot="end" color="primary">
+    add Rooms
+  </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding custom-content">
+  <div class="form-wrapper">
+    <form [formGroup]="roomForm" (ngSubmit)="addRoom()">
+      <ion-item>
+        <ion-label position="floating">Room Name</ion-label>
+        <ion-input formControlName="name"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Capacity</ion-label>
+        <ion-input type="number" formControlName="capacity"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Location</ion-label>
+        <ion-input formControlName="location"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Amenities (comma-separated)</ion-label>
+        <ion-input formControlName="amenities"></ion-input>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label>Upload Image</ion-label>
+        <input type="file" (change)="onImageSelected($event)" />
+      </ion-item>
+
+      <ion-img *ngIf="imagePreview" [src]="imagePreview" class="image-preview"></ion-img>
+
+      <ion-button expand="block" type="submit" [disabled]="roomForm.invalid">
+        Add Room
+      </ion-button>
+    </form>
+  </div>
+</ion-content>

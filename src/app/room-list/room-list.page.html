@@ -1,0 +1,25 @@
+<ion-header class="available-header">
+  <ion-toolbar color="primary">
+    <ion-title class="title-center">Available Rooms</ion-title>
+    <ion-button routerlink="/track-bookings" slot="end" color="primary">
+    add Rooms
+  </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding available-content">
+  <div class="room-grid">
+    <ion-card *ngFor="let room of rooms$ | async" class="room-card">
+      <ion-img *ngIf="room.imageBase64" [src]="room.imageBase64" class="room-image"></ion-img>
+      <ion-card-header>
+        <ion-card-title>{{ room.name }}</ion-card-title>
+        <ion-card-subtitle>{{ room.location }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <p>Capacity: {{ room.capacity }}</p>
+        <p *ngIf="room.amenities?.length">Amenities: {{ room.amenities.join(', ') }}</p>
+        <ion-button expand="block" (click)="goToBooking(room.id)">Book</ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

@@ -1,0 +1,52 @@
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.stats-container ion-card {
+  margin: 0;
+}
+
+.loading-spinner {
+  display: block;
+  margin: 20px auto;
+}
+
+.booking-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.booking-date {
+  font-size: 12px;
+}
+
+ion-item.pending {
+  border-left: 4px solid var(--ion-color-warning);
+}
+
+ion-item.approved {
+  border-left: 4px solid var(--ion-color-success);
+}
+
+ion-item.rejected {
+  border-left: 4px solid var(--ion-color-danger);
+}
+
+.filter-card {
+  margin-bottom: 16px;
+}
+
+/* Make sure cards don't have excessive padding in mobile */
+@media (max-width: 576px) {
+  ion-card {
+    margin: 12px 0;
+  }
+  
+  ion-grid {
+    padding: 0;
+  }
+}

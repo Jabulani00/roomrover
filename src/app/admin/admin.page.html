@@ -1,0 +1,168 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Booking Admin Panel</ion-title>
+  <ion-button routerlink="/add-room" slot="end" color="primary">
+    add Rooms
+  </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <!-- Stats Cards -->
+  <div class="stats-container ion-margin-bottom">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>{{ totalBookings }}</ion-card-title>
+        <ion-card-subtitle>Total Bookings</ion-card-subtitle>
+      </ion-card-header>
+    </ion-card>
+
+    <ion-card color="warning">
+      <ion-card-header>
+        <ion-card-title>{{ pendingBookings }}</ion-card-title>
+        <ion-card-subtitle>Pending</ion-card-subtitle>
+      </ion-card-header>
+    </ion-card>
+
+    <ion-card color="success">
+      <ion-card-header>
+        <ion-card-title>{{ approvedBookings }}</ion-card-title>
+        <ion-card-subtitle>Approved</ion-card-subtitle>
+      </ion-card-header>
+    </ion-card>
+
+    <ion-card color="danger">
+      <ion-card-header>
+        <ion-card-title>{{ rejectedBookings }}</ion-card-title>
+        <ion-card-subtitle>Rejected</ion-card-subtitle>
+      </ion-card-header>
+    </ion-card>
+  </div>
+
+  <!-- Filters Section -->
+  <ion-card class="filter-card">
+    <ion-card-header>
+      <ion-card-title>Filters</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12" size-md="4">
+            <ion-item>
+              <ion-label>Status</ion-label>
+              <ion-select [(ngModel)]="selectedStatusFilter" (ionChange)="onStatusFilterChange()">
+                <ion-select-option value="all">All Statuses</ion-select-option>
+                <ion-select-option value="pending">Pending</ion-select-option>
+                <ion-select-option value="approved">Approved</ion-select-option>
+                <ion-select-option value="rejected">Rejected</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="12" size-md="4">
+            <ion-item>
+              <ion-label>Room</ion-label>
+              <ion-select [(ngModel)]="selectedRoomFilter" (ionChange)="onRoomFilterChange()">
+                <ion-select-option value="all">All Rooms</ion-select-option>
+                <ion-select-option *ngFor="let room of rooms" [value]="room.id">
+                  {{ room.name }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="12" size-md="4">
+            <ion-item>
+              <ion-label>Date</ion-label>
+              <ion-select [(ngModel)]="selectedDateFilter" (ionChange)="onDateFilterChange()">
+                <ion-select-option value="all">All Dates</ion-select-option>
+                <ion-select-option value="today">Today</ion-select-option>
+                <ion-select-option value="tomorrow">Tomorrow</ion-select-option>
+                <ion-select-option value="week">Next 7 Days</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Bookings List -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Booking Requests</ion-card-title>
+      <ion-card-subtitle>{{ filteredBookings.length }} bookings found</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content class="ion-no-padding">
+      <ion-spinner *ngIf="isLoading" name="dots" class="loading-spinner"></ion-spinner>
+      
+      <ion-list *ngIf="!isLoading">
+        <ion-item *ngIf="filteredBookings.length === 0" lines="none">
+          <ion-label color="medium" class="ion-text-center">
+            No bookings match your current filters
+          </ion-label>
+        </ion-item>
+
+        <ion-item-sliding *ngFor="let booking of filteredBookings">
+          <ion-item [ngClass]="{'pending': booking.status === 'pending', 'approved': booking.status === 'approved', 'rejected': booking.status === 'rejected'}">
+            <ion-label>
+              <h2>{{ booking.userName }}</h2>
+              <h3>Room: {{ booking.roomName }}</h3>
+              <p>
+                <ion-text>
+                  <ion-icon name="calendar-outline"></ion-icon> 
+                  {{ booking.formattedStartTime }} - {{ booking.formattedEndTime }}
+                </ion-text>
+              </p>
+              <p>
+                <ion-text>
+                  <ion-icon name="information-circle-outline"></ion-icon> 
+                  Purpose: {{ booking.purpose }}
+                </ion-text>
+              </p>
+              <p *ngIf="booking.adminNotes">
+                <ion-text>
+                  <ion-icon name="chatbox-outline"></ion-icon> 
+                  Admin notes: {{ booking.adminNotes }}
+                </ion-text>
+              </p>
+              <p class="booking-status">
+                <ion-badge [color]="booking.status === 'pending' ? 'warning' : (booking.status === 'approved' ? 'success' : 'danger')">
+                  {{ booking.status | titlecase }}
+                </ion-badge>
+                <ion-text color="medium" class="booking-date">
+                  <small>Requested: {{ booking.formattedCreatedAt }}</small>
+                </ion-text>
+              </p>
+            </ion-label>
+
+            <ion-buttons slot="end" *ngIf="booking.status === 'pending'">
+              <ion-button color="success" (click)="promptAdminNotes(booking.id, 'approve')">
+                <ion-icon slot="icon-only" name="checkmark-circle-outline"></ion-icon>
+              </ion-button>
+              <ion-button color="danger" (click)="promptAdminNotes(booking.id, 'reject')">
+                <ion-icon slot="icon-only" name="close-circle-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-item>
+        </ion-item-sliding>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Room Usage Stats -->
+  <ion-card *ngIf="getRoomKeys().length > 0">
+    <ion-card-header>
+      <ion-card-title>Room Usage</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let roomKey of getRoomKeys()">
+          <ion-label>{{ getRoomName(roomKey) }}</ion-label>
+          <ion-badge slot="end" color="primary">{{ bookingsByRoom[roomKey] }}</ion-badge>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
