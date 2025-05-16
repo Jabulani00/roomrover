@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-startone',
@@ -11,30 +12,13 @@ export class StartonePage implements OnInit {
   showAdminModal = false;
   adminUsername = '';
   adminPassword = '';
- 
-  // Featured rooms data
-  featuredRooms = [
-    {
-      name: 'Conference Room A',
-      capacity: 20,
-      location: 'Main Building, Floor 2',
-      imageClass: 'conference'
-    },
-    {
-      name: 'Meeting Room B',
-      capacity: 8,
-      location: 'East Wing, Floor 1',
-      imageClass: 'meeting'
-    },
-    {
-      name: 'Creative Studio',
-      capacity: 12,
-      location: 'Innovation Hub, Floor 3',
-      imageClass: 'creative'
-    }
-  ];
 
-  constructor(private router: Router) {}
+
+
+  constructor(
+    private router: Router,
+    private toastController: ToastController
+  ) {}
 
   ngOnInit() {}
 
@@ -49,14 +33,30 @@ export class StartonePage implements OnInit {
     this.adminPassword = '';
   }
 
-  loginAdmin() {
-    // Simple default login for admin
-    if (this.adminUsername === 'admin' && this.adminPassword === 'admin') {
-      this.dismissAdminModal();
-      this.router.navigate(['/admin']);
-    } else {
-      // You could add a toast or alert here for invalid credentials
-      console.log('Invalid admin credentials');
-    }
+  async showInvalidToast() {
+    const toast = await this.toastController.create({
+      message: 'Invalid admin credentials',
+      duration: 2000,
+      color: 'danger',
+    });
+    toast.present();
   }
+
+ async loginAdmin() {
+  if (
+    this.adminUsername === 'admin@rover.com' &&
+    this.adminPassword === '1234567'
+  ) {
+    this.dismissAdminModal(); // Close modal first
+    
+    // Add a small delay to ensure modal closing animation completes
+    setTimeout(() => {
+      this.router.navigate(['/admin']);
+    }, 150); // 150ms should be enough for most modal animations
+    
+  } else {
+    this.showInvalidToast();
+  }
+}
+
 }
